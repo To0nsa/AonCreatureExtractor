@@ -1,0 +1,17 @@
+/home/toonsa/AonCreatureExtractor/bin/Debug/net8.0/AonCreatureExtractor
+/home/toonsa/AonCreatureExtractor/bin/Debug/net8.0/AonCreatureExtractor.deps.json
+/home/toonsa/AonCreatureExtractor/bin/Debug/net8.0/AonCreatureExtractor.runtimeconfig.json
+/home/toonsa/AonCreatureExtractor/bin/Debug/net8.0/AonCreatureExtractor.dll
+/home/toonsa/AonCreatureExtractor/bin/Debug/net8.0/AonCreatureExtractor.pdb
+/home/toonsa/AonCreatureExtractor/bin/Debug/net8.0/HtmlAgilityPack.dll
+/home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/AonCreatureExtractor.csproj.AssemblyReference.cache
+/home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/AonCreatureExtractor.GeneratedMSBuildEditorConfig.editorconfig
+/home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/AonCreatureExtractor.AssemblyInfoInputs.cache
+/home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/AonCreatureExtractor.AssemblyInfo.cs
+/home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/AonCreatureExtractor.csproj.CoreCompileInputs.cache
+/home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/AonCreat.DB005830.Up2Date
+/home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/AonCreatureExtractor.dll
+/home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/refint/AonCreatureExtractor.dll
+/home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/AonCreatureExtractor.pdb
+/home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/AonCreatureExtractor.genruntimeconfig.cache
+/home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/ref/AonCreatureExtractor.dll
