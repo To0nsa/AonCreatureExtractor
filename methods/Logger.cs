@@ -3,7 +3,9 @@ using System;
 /// <summary>
 /// Provides simple logging functionality for printing headers and text to the console.
 /// </summary>
+#pragma warning disable CA1050 // Declare types in namespaces
 public static class Logger
+#pragma warning restore CA1050 // Declare types in namespaces
 {
 	/// <summary>
 	/// Prints a formatted header with a title to the console.

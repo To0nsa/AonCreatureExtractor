@@ -75,6 +75,12 @@ public static class HtmlParser
 					sb.AppendLine();
 					break;
 
+				// For <b> elements, extract the formatted text and then append one space.
+				case "b":
+					sb.Append(ExtractFormattedText(child));
+					sb.Append(' ');  // Ensure one trailing space after <b> content.
+					break;
+
 				// Default case for other node types.
 				default:
 					// If the node is a text node, append its text content with an extra space.
@@ -87,7 +93,7 @@ public static class HtmlParser
 						// For non-text element nodes, recursively extract their formatted text.
 						sb.Append(ExtractFormattedText(child));
 					}
-					break;
+					break ;
 			}
 		}
 
