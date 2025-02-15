@@ -38,14 +38,13 @@ class Program
 			string htmlContent = await HtmlFetcher.FetchHtmlAsync(url);
 
 			// Extract raw text from the fetched HTML.
-			string extractedText = HtmlParser.ExtractText(htmlContent);
+			var (extractedText, isNpc) = HtmlParser.ExtractText(htmlContent);
 
 			// Format the extracted text
 			string formattedText = TextProcessor.FormatText(extractedText);
 
 			// Extract the creature name from the raw text.
-			// (the first non-empty line, trimmed and lowercased.)
-			string creatureName = TextProcessor.GetCreatureName(extractedText);
+			string creatureName = TextProcessor.GetCreatureName(extractedText, isNpc);
 
 			// Sanitize the creature name to ensure it's a valid file name.
 			string safeFileName = TextProcessor.SanitizeFileName(creatureName);

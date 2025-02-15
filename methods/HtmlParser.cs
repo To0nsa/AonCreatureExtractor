@@ -16,26 +16,30 @@ public static class HtmlParser
 	/// A formatted string extracted from the HTML. Returns an empty string if the input is null or whitespace,
 	/// or a message if the specified content node is not found.
 	/// </returns>
-	public static string ExtractText(string html)
+	public static (string Text, bool IsNpc) ExtractText(string html)
 	{
 		// Return an empty string if the input HTML is null, empty, or whitespace.
 		if (string.IsNullOrWhiteSpace(html))
-			return string.Empty;
+			return (string.Empty, false);
 
 		// Create an instance of HtmlDocument and load the HTML content.
 		var doc = new HtmlDocument();
 		doc.LoadHtml(html);
 
-		// Select the content node using XPath.
-		// This example targets a table with the specific id 'MainContent_DataListFeats'.
-		var contentNode = doc.DocumentNode.SelectSingleNode("//table[@id='MainContent_DataListFeats']");
+		// Try to select the content node from either of two possible table IDs using the null-coalescing operator.
+		var contentNode = doc.DocumentNode.SelectSingleNode("//table[@id='MainContent_DataListFeats']")
+			?? doc.DocumentNode.SelectSingleNode("//table[@id='MainContent_DataListNPCs']");
+
+		// If no valid content node is found, return an error message.
 		if (contentNode == null)
-			return "No valid content found.";
+			return ("No valid content found.", false);
 
-		// Extract and format the text from the content node.
+		// Determine whether we used the NPC table.
+		bool isNpc = contentNode.Id.Equals("MainContent_DataListNPCs", StringComparison.OrdinalIgnoreCase);
+
+		// Extract and format the text from the found content node.
 		string text = ExtractFormattedText(contentNode);
-
-		return text;
+		return (text, isNpc);
 	}
 
 	/// <summary>
@@ -55,12 +59,15 @@ public static class HtmlParser
 			// Process the node based on its tag name (converted to lowercase for consistency).
 			switch (child.Name.ToLower())
 			{
-				// For header elements, add a newline before and after, and convert text to uppercase.
+				// For h1 elements, do nothing (skip them).
 				case "h1":
+					break;
+
+				// For header elements, add a newline before and after, and convert text to uppercase.
 				case "h2":
 				case "h3":
-					sb.AppendLine();                      // Insert a newline to separate from previous content.
-					sb.AppendLine(child.InnerText.ToUpper()); // Append header text in uppercase followed by a newline.
+					sb.AppendLine();                    // Insert a newline to separate from previous content.
+					sb.AppendLine(child.InnerText); 	// Append header text followed by a newline.
 					break;
 
 				// For <br> elements, simply insert a newline.

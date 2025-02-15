@@ -35,17 +35,33 @@ public static class TextProcessor
 	/// <returns>
 	/// The creature name in lowercase and trimmed, or "output" if no valid name is found.
 	/// </returns>
-	public static string GetCreatureName(string text)
+	public static string GetCreatureName(string text, bool isNpc)
 	{
-		// Split the text into lines and select the first non-empty line.
-		var firstLine = text
-			.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
-			.FirstOrDefault();
+		// Split the text into non-empty lines.
+		var lines = text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+		if (lines.Length == 0)
+			return "output";
 
-		// If no valid line is found, return "output"; otherwise, trim and convert to lowercase.
-		return string.IsNullOrWhiteSpace(firstLine)
-			? "output"
-			: firstLine.Trim().ToLowerInvariant();
+		if (isNpc)
+		{
+			// For NPC content, use the first line.
+			string firstLine = lines[0].Trim();
+			// Split the first line into words.
+			var words = firstLine.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+			// Take words until "CR" is encountered.
+			var selectedWords = words.TakeWhile(word => !word.Equals("CR", StringComparison.OrdinalIgnoreCase));
+			// Join the words with a space.
+			string result = string.Join(" ", selectedWords);
+			return string.IsNullOrWhiteSpace(result) ? "output" : result.ToLowerInvariant();
+		}
+		else
+		{
+			var thirdLine = lines[1].Trim();
+			var words = thirdLine.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+			var selectedWords = words.TakeWhile(word => !word.Equals("CR", StringComparison.OrdinalIgnoreCase));
+			string result = string.Join(" ", selectedWords);
+			return string.IsNullOrWhiteSpace(result) ? "output" : result.ToLowerInvariant();
+		}
 	}
 
 	/// <summary>
