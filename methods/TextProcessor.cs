@@ -1,57 +1,65 @@
 using System;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
+/// <summary>
+/// Provides utility methods for processing text, including formatting,
+/// extracting a creature name from text, and sanitizing file names.
+/// </summary>
 public static class TextProcessor
 {
-    public static string FormatText(string rawText)
-    {
-        if (string.IsNullOrWhiteSpace(rawText))
-            return string.Empty;
+	/// <summary>
+	/// Formats the provided raw text by reducing multiple spaces or tabs to a single space.
+	/// </summary>
+	/// <param name="rawText">The raw text to format.</param>
+	/// <returns>A formatted version of the text with reduced whitespace.</returns>
+	public static string FormatText(string rawText)
+	{
+		// Return an empty string if input is null, empty, or whitespace.
+		if (string.IsNullOrWhiteSpace(rawText))
+			return string.Empty;
 
-        string cleanedText = rawText;
+		// Use Regex to replace multiple spaces or tabs with a single space.
+		string cleanedText = Regex.Replace(rawText, @"[ \t]+", " ", RegexOptions.Compiled);
 
-        // 1. Reduce multiple spaces to a single space.
-        cleanedText = Regex.Replace(cleanedText, @"[ \t]+", " ", RegexOptions.Compiled);
+		return cleanedText;
+	}
+	
+	/// <summary>
+	/// Extracts the creature name from the provided text.
+	/// It assumes the creature name is the first non-empty line of the text.
+	/// The returned name is trimmed and converted to lowercase.
+	/// </summary>
+	/// <param name="text">The text containing the creature name.</param>
+	/// <returns>
+	/// The creature name in lowercase and trimmed, or "output" if no valid name is found.
+	/// </returns>
+	public static string GetCreatureName(string text)
+	{
+		// Split the text into lines and select the first non-empty line.
+		var firstLine = text
+			.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+			.FirstOrDefault();
 
-        // 2. Remove colons from section headers and key-value pairs (e.g., "AC: 15" → "AC 15")
-        cleanedText = Regex.Replace(cleanedText, @"(?<=\b[A-Z][a-zA-Z]*)\s*:", "", RegexOptions.Compiled);
+		// If no valid line is found, return "output"; otherwise, trim and convert to lowercase.
+		return string.IsNullOrWhiteSpace(firstLine)
+			? "output"
+			: firstLine.Trim().ToLowerInvariant();
+	}
 
-        // 3. Remove newlines around commas in one go:
-        //    - (?<=,) matches a position after a comma.
-        //    - (?=,) matches a position before a comma.
-        cleanedText = Regex.Replace(cleanedText, @"(?<=,)\s*\r?\n|\r?\n\s*(?=,)", " ", RegexOptions.Compiled);
-
-        // 4. Merge single-letter lines (like "D") with the previous line.
-        cleanedText = Regex.Replace(cleanedText, @"\r?\n([A-Z])\b", " $1", RegexOptions.Compiled);
-
-        // 5. Specific formatting for known patterns:
-        cleanedText = Regex.Replace(cleanedText, @"(1st— [^\n]+),\s*\r?\n\s*(\(DC \d+\))", "$1 $2", RegexOptions.Compiled);
-        cleanedText = Regex.Replace(cleanedText, @"(Init) (\+?\d+);\s*\r?\n\s*(Senses .+)", "$1 $2; $3", RegexOptions.Compiled);
-        cleanedText = Regex.Replace(cleanedText, @"(Base Atk .+);\s*\r?\n\s*(CMB .+);\s*\r?\n\s*(CMD .+)", "$1; $2; $3", RegexOptions.Compiled);
-        cleanedText = Regex.Replace(cleanedText, @"D:\s*domain spell;\s*\r?\n\s*Domains:\s*", "D domain spell; Domains ", RegexOptions.Compiled);
-
-        // 6. Fix newlines before parenthesis (e.g., "(DC 19)") so they appear on the same line.
-        cleanedText = Regex.Replace(cleanedText, @"\r?\n\s*(\([^)]+\))", " $1", RegexOptions.Compiled);
-
-        // 7. Remove unwanted double quotes from spell names and descriptions.
-        cleanedText = Regex.Replace(cleanedText, @"(?<!\w)""(.*?)""(?!\w)", "$1", RegexOptions.Compiled);
-
-        // Merge any header block (e.g., "Breath Weapon (Su):", "Poison (Ex):", etc.)
-        //    This generic regex finds a header (a line starting with a set of allowed characters followed by a colon)
-        //    and then merges all following lines that do not themselves start with a header.
-		cleanedText = Regex.Replace(cleanedText,
-		@"(^[A-Za-z0-9 '()/-]+:\s*)([^\r\n]+(?:\r?\n(?![A-Za-z0-9 '()/-]+:\s|DESCRIPTION\b)[^\r\n]+)+)",
-		m =>
+	/// <summary>
+	/// Sanitizes a file name by replacing any characters that are invalid in file names with an underscore.
+	/// </summary>
+	/// <param name="fileName">The file name to sanitize.</param>
+	/// <returns>A sanitized file name safe for use in file systems.</returns>
+	public static string SanitizeFileName(string fileName)
+	{
+		// Iterate through invalid file name characters and replace them with an underscore.
+		foreach (char invalidChar in Path.GetInvalidFileNameChars())
 		{
-			string header = m.Groups[1].Value;
-			string body = m.Groups[2].Value;
-			return header + body.Replace("\r\n", " ").Replace("\n", " ");
-		},
-		RegexOptions.Multiline | RegexOptions.Compiled);
-
-        // 9. Remove excessive blank lines.
-        cleanedText = Regex.Replace(cleanedText, @"(\r?\n\s*){2,}", "\n", RegexOptions.Compiled).Trim();
-
-        return cleanedText;
-    }
+			fileName = fileName.Replace(invalidChar, '_');
+		}
+		return fileName;
+	}
 }

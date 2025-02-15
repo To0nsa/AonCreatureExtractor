@@ -15,3 +15,4 @@
 /home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/AonCreatureExtractor.pdb
 /home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/AonCreatureExtractor.genruntimeconfig.cache
 /home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/ref/AonCreatureExtractor.dll
+/home/toonsa/AonCreatureExtractor/obj/Debug/net8.0/AonCreatureExtractor.sourcelink.json
