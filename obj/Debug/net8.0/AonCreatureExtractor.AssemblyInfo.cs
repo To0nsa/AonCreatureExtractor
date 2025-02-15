@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AonCreatureExtractor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e9e64f4129202558f4ca80e58e4a19fa954543af")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9d11767657e1a109ee4d351df72425000c4db9ab")]
 [assembly: System.Reflection.AssemblyProductAttribute("AonCreatureExtractor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AonCreatureExtractor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
